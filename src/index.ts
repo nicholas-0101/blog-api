@@ -1,5 +1,6 @@
 import express, { Application, NextFunction, Request, Response } from "express";
-import trackerRouter from "./routers/tracker.router"
+import userRouter from "./routers/user.router";
+import blogRouter from "./routers/blog.router";
 // import cors from "cors";
 
 const PORT = "4001";
@@ -23,7 +24,8 @@ app.get("/", (request: Request, response: Response) => {
   response.status(200).send("<h1>API express</h1>"); // status 200, success
 });
 
-app.use("/tracker", trackerRouter);
+app.use("/blog/user", userRouter);
+app.use("/blog", blogRouter);
 
 // error handling middleware
 app.use(

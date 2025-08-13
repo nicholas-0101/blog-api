@@ -15,27 +15,34 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Categories {
-  id   Int          @id @default(autoincrement())
-  name String
-  type CategoryType
-  Transactions Transactions[] 
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String
+  email     String   @unique
+  password  String
+  blogs     Blog[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-enum CategoryType { // This enum defines the type of category
-  income
-  expense
+model Blog {
+  id        Int          @id @default(autoincrement())
+  title     String       @unique
+  thumbnail String
+  category  CategoryType
+  content   String
+  authorId  Int
+  author    User         @relation(fields: [authorId], references: [id])
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@index([authorId])
 }
 
-model Transactions {
-  id         Int      @id @default(autoincrement())
-  title      String
-  nominal    Int
-  date       DateTime
-  categoryId Int
-
-  // define relation
-  Categories Categories @relation(fields: [categoryId], references: [id])
+enum CategoryType {
+  health
+  technology
+  travel
+  food
+  finance
 }
-
-
