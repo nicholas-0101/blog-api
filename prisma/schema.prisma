@@ -40,9 +40,9 @@ model Blog {
 }
 
 enum CategoryType {
-  health
   technology
-  travel
   food
+  travel
+  health
   finance
 }

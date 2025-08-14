@@ -3,6 +3,8 @@ import { createBlog, deleteBlog, editBlog, getBlogDetails, getBlogs } from "../c
 
 const router: Router = Router();
 
+router.get("/", getBlogs); // /blog or /blog?title=testing or /blog?category=health or /blog?author=testing
+router.get("/detail/:title", getBlogDetails); // /blog/detail/testing
 router.post("/create", createBlog); // /blog/create
 /**
  * {
@@ -13,9 +15,7 @@ router.post("/create", createBlog); // /blog/create
   "authorId": 1
 }
  */
-router.get("/", getBlogs); 
-router.get("/detail/:title", getBlogDetails); // /detail/testing2
-router.patch("/edit/:id", editBlog); // /edit/2
+router.patch("/edit/:id", editBlog); // /blog/edit/2
 /**
  * {
   "title" : "testing edit", 
@@ -23,6 +23,6 @@ router.patch("/edit/:id", editBlog); // /edit/2
   "category": "food"
 }
  */
-router.delete("/delete/:id", deleteBlog); // /delete/2
+router.delete("/delete/:id", deleteBlog); // /blog/delete/2
 
 export default router
