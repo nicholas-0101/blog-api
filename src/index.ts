@@ -36,5 +36,5 @@ app.use(
 );
 
 app.listen(PORT, () => {
-  console.log("API express running at port:", PORT,`-> http://localhost:${PORT}/tracker`);
+  console.log("API express running at port:", PORT,`-> http://localhost:${PORT}`);
 });

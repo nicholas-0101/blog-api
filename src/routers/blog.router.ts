@@ -1,14 +1,28 @@
 import { Router } from "express";
-import { createBlog } from "../controllers/blog.controller";
+import { createBlog, deleteBlog, editBlog, getBlogDetails, getBlogs } from "../controllers/blog.controller";
 
 const router: Router = Router();
 
-router.post("/create", createBlog); 
-// router.get("/", getTracker); 
-// router.patch("/edit/:id", editTracker); 
-// router.delete("/delete/:id", deleteTracker); 
-// router.get("/total-by-category/:categoryId", getTotalByCategory); // /total-by-category/1
-// router.get("/detail/:id", getTrackerDetail); 
-// router.get("/total-by-date", getTotalByDateRange); // /total-by-date?start=2025-08-01&end=2025-08-30
+router.post("/create", createBlog); // /blog/create
+/**
+ * {
+  "title" : "testing", 
+  "thumbnail": "test",
+  "category": "health",
+  "content": "lorem ipsum dolor sit amet",
+  "authorId": 1
+}
+ */
+router.get("/", getBlogs); 
+router.get("/detail/:title", getBlogDetails); // /detail/testing2
+router.patch("/edit/:id", editBlog); // /edit/2
+/**
+ * {
+  "title" : "testing edit", 
+  "thumbnail": "test edit",
+  "category": "food"
+}
+ */
+router.delete("/delete/:id", deleteBlog); // /delete/2
 
 export default router
