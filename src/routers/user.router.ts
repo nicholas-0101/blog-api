@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUserById, signIn, signUp } from "../controllers/user.controller";
+import { keepLogin, signIn, signUp } from "../controllers/user.controller";
 
 const router: Router = Router();
 
@@ -18,6 +18,9 @@ router.post("/signin", signIn); // /blog/user/signin
 "password": "testing"
 }
 */
-router.get("/:id", getUserById); // /blog/user/2 (used for show username in navbar)
+router.get("/keep", keepLogin)
+
+
+// router.get("/:id", getUserById); // /blog/user/2 (used for show username in navbar)
 
 export default router;
