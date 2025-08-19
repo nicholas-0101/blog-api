@@ -12,13 +12,30 @@ export const signUp = async (
   next: NextFunction
 ) => {
   try {
+    // check email and username has regestered or not
+    const { email, username } = request.body;
+    const existingUser = await prisma.user.findUnique({ where: { username } });
+    if (existingUser) {
+      return response
+        .status(400)
+        .send({ success: false, message: "Username already registered" });
+    }
+  
+    const existingEmail = await prisma.user.findUnique({ where: { email } });
+    if (existingEmail) {
+      return response
+        .status(400)
+        .send({ success: false, message: "Email already registered" });
+    }
+    
+    // create a new account
     const newUser = await prisma.user.create({
       data: {
         ...request.body,
         password: await hashPassword(request.body.password),
       },
     });
-
+    
     response.status(200).send({
       success: true,
       message: "User registered successfully",
@@ -44,6 +61,7 @@ export const signIn = async (
       },
     });
 
+    // if user not registered
     if (!signInUser) {
       return response.status(404).send({
         success: false,
@@ -59,7 +77,7 @@ export const signIn = async (
     if (!comparePassword) {
       return response
         .status(401)
-        .json({ success: false, message: "Wrong password!" });
+        .send({ success: false, message: "Password incorrect" });
     }
 
     const token = createToken(signInUser, "24h");
@@ -68,7 +86,12 @@ export const signIn = async (
     response.status(200).send({
       success: true,
       message: "Sign In successful",
-      user: { email: signInUser.email, token },
+      user: {
+        id: signInUser.id,
+        email: signInUser.email,
+        username: signInUser.username,
+        token,
+      },
     });
   } catch (error) {
     next(error);
@@ -107,33 +130,14 @@ export const keepLogin = async (
     response.status(200).send({
       success: true,
       message: "Sign In successful",
-      user: { email: signInUser.email, token: newToken },
+      user: {
+        id: signInUser.id,
+        email: signInUser.email,
+        username: signInUser.username,
+        token: newToken,
+      },
     });
   } catch (error) {
     next(error);
   }
 };
-
-// GET USER details for show in navbar
-// export const getUserById = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const { id } = req.params;
-//     const user = await prisma.user.findUnique({
-//       where: { id:Number(id) },
-//     });
-
-//     if (!user) {
-//       return res
-//         .status(404)
-//         .send({ success: false, message: "User not found" });
-//     }
-
-//     res.status(200).send({ success: true, user });
-//   } catch (error) {
-//     next(error);
-//   }
-// };

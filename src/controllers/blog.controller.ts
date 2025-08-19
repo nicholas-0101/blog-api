@@ -20,6 +20,7 @@ export const getBlogs = async (
           select: { username: true },
         },
       },
+      orderBy: { createdAt: "desc" },
     });
 
     if (blogs.length === 0) {
@@ -32,6 +33,30 @@ export const getBlogs = async (
     response.status(200).send({
       success: true,
       message: "Blogs retrived succesfully",
+      blogs,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// GET blog for signed in user
+export const getMyBlogs = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const { userId } = request.params; 
+  
+  try {
+    const blogs = await prisma.blog.findMany({
+      where: { authorId: Number(userId) },
+      orderBy: { createdAt: "desc" },
+    });
+
+    response.send({
+      success: true,
+      message: "Blog retrived succesfully",
       blogs,
     });
   } catch (error) {
@@ -86,8 +111,18 @@ export const createBlog = async (
   next: NextFunction
 ) => {
   try {
+    console.log(request.body)
+    const { title, thumbnail, category, content, authorId } = request.body;
     const newBlog = await prisma.blog.create({
-      data: { ...request.body },
+      data: {
+        title,
+        thumbnail,
+        category,
+        content,
+        author: {
+          connect: { id: Number(authorId) }, 
+        },
+      },
       include: {
         author: true, // Include the related author
       },

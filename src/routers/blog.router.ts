@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { createBlog, deleteBlog, editBlog, getBlogDetails, getBlogs } from "../controllers/blog.controller";
+import { createBlog, deleteBlog, editBlog, getBlogDetails, getBlogs, getMyBlogs } from "../controllers/blog.controller";
 
 const router: Router = Router();
 
 router.get("/", getBlogs); // /blog or /blog?title=testing or /blog?category=health or /blog?author=testing
+router.get("/myblogs/:userId", getMyBlogs); // /blog/myblogs/2
 router.get("/detail/:title", getBlogDetails); // /blog/detail/testing
 router.post("/create", createBlog); // /blog/create
 /**

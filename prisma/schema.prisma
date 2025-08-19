@@ -17,12 +17,18 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
-  username  String
+  username  String   @unique
   email     String   @unique
   password  String
+  role      RoleType @default(user)
   blogs     Blog[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum RoleType {
+  user
+  admin
 }
 
 model Blog {
